@@ -1,4 +1,4 @@
-package api.apps.speedtest.BeginTest;
+package api.apps.speedtest.begintest;
 
 import core.UiObject;
 import core.UiSelector;

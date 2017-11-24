@@ -1,9 +1,9 @@
 package api.apps.speedtest;
 
 import api.android.Android;
-import api.apps.speedtest.BeginTest.BeginTest;
-import api.apps.speedtest.Home.Home;
-import api.apps.speedtest.Menu.Menu;
+import api.apps.speedtest.begintest.BeginTest;
+import api.apps.speedtest.home.Home;
+import api.apps.speedtest.menu.Menu;
 import api.interfaces.Application;
 
 public class SpeedTestApp implements Application {

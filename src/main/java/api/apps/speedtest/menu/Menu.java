@@ -1,7 +1,7 @@
-package api.apps.speedtest.Menu;
+package api.apps.speedtest.menu;
 
 import api.android.Android;
-import api.apps.speedtest.Home.Home;
+import api.apps.speedtest.home.Home;
 import org.apache.log4j.Logger;
 
 public class Menu {

@@ -1,4 +1,4 @@
-package api.apps.speedtest.Home;
+package api.apps.speedtest.home;
 
 import core.UiObject;
 import core.UiSelector;

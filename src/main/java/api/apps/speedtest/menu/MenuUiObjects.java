@@ -1,4 +1,4 @@
-package api.apps.speedtest.Menu;
+package api.apps.speedtest.menu;
 
 import core.UiObject;
 import core.UiSelector;

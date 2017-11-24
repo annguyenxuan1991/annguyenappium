@@ -1,7 +1,7 @@
-package api.apps.speedtest.BeginTest;
+package api.apps.speedtest.begintest;
 
 import api.android.Android;
-import api.apps.speedtest.Home.Home;
+import api.apps.speedtest.home.Home;
 import api.interfaces.Activity;
 import org.apache.log4j.Logger;
 

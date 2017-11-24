@@ -4,6 +4,7 @@ import core.ADB;
 import core.Constants.Arg;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
+import io.appium.java_client.service.local.flags.GeneralServerFlag;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.service.DriverService;
@@ -59,7 +60,7 @@ public class DriverManager {
                     .withIPAddress(host(deviceId).toString().split(":")[1].replace("//", ""))
                     .usingPort(Integer.parseInt(host(deviceId).toString().split(":")[2].replace("/wd/hub","")))
                     .withArgument(Arg.TIMEOUT, "120")
-                    .withArgument(Arg.LOG_LEVEL, "warn")
+                    .withArgument(GeneralServerFlag.LOG_LEVEL, "warn")
                     .build();
         } else {
             logger.error("Starting appium service failed due to un-supported OS or for some unexpected error");

@@ -1,7 +1,7 @@
-package api.apps.speedtest.Home;
+package api.apps.speedtest.home;
 
 import api.android.Android;
-import api.apps.speedtest.Menu.Menu;
+import api.apps.speedtest.menu.Menu;
 import api.interfaces.Activity;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.NoSuchElementException;
@@ -13,11 +13,11 @@ public class Home implements Activity {
 
     public Home waitToload() {
         try {
-            logger.info("Waiting for Home activity");
+            logger.info("Waiting for home activity");
             uiObjects.testAgainBtn().waitToAppear(10);
             return Android.apps.speedTest.home;
         } catch (AssertionError e) {
-            throw new AssertionError("Home activity failed to load/open");
+            throw new AssertionError("home activity failed to load/open");
         }
     }
 
