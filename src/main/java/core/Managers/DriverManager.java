@@ -19,10 +19,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class DriverManager {
 
@@ -46,10 +43,15 @@ public class DriverManager {
         return caps;
     }
 
+    //Random port from 4720 to 4730
+    private static String getRandomPort() {
+        return Integer.toString(new Random().nextInt((4730 - 4720) + 1) + 4720);
+    }
+
     private static URL host(String deviceId) throws MalformedURLException {
         if(hosts == null) {
-            hosts = new HashMap<String, URL>();
-            hosts.put(deviceId, new URL("http://127.0.0.1:4723/wd/hub"));
+            hosts = new HashMap<>();
+            hosts.put(deviceId, new URL("http://127.0.0.1:"+getRandomPort()+"/wd/hub"));
         }
         return hosts.get(deviceId);
     }
@@ -64,7 +66,8 @@ public class DriverManager {
                     .withLogFile(new File(new File("log"), "androidLog.txt")));
 
         } else if (osName.contains("Mac")) {
-            System.out.println(Arg.LOCATL_TIME_ZONE);
+            logger.info("Creating Appium service on MAC with Url: http://127.0.0.1 and Port: "+
+                    Integer.parseInt(host(deviceId).toString().split(":")[2].replace("/wd/hub","")));
             service = new AppiumServiceBuilder()
                     .usingDriverExecutable(new File(nodeJS))
                     .withAppiumJS(new File(appiumJS))
@@ -92,7 +95,6 @@ public class DriverManager {
                     Android.driver = new AndroidDriver(host(device), getDefaultCapsAndroid(device));
                     Android.adb = new ADB(device);
                     leaveQueue();
-                    break;
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -111,11 +113,10 @@ public class DriverManager {
 
     private static ArrayList<String> getAvailableDevices(){
         logger.info("Checking for available devices");
-        ArrayList<String> availableDevices = new ArrayList<String>();
+        ArrayList<String> availableDevices = new ArrayList<>();
         ArrayList connectedDevices = ADB.getConnectedDevices();
         for(Object connectedDevice: connectedDevices){
             String device = connectedDevice.toString();
-            ArrayList apps = new ADB(device).getInstalledPackages();
             if(useDevice(deviceId)) availableDevices.add(device);
             else logger.info("Device: "+deviceId+" is being used by another JVM");
         }
