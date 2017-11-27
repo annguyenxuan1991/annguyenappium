@@ -1,4 +1,4 @@
-package core.Managers;
+package core.managers;
 
 import java.io.*;
 import java.util.Scanner;

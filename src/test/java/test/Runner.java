@@ -1,7 +1,7 @@
 package test;
 
 import api.android.Android;
-import core.Managers.DriverManager;
+import core.managers.DriverManager;
 
 import java.net.MalformedURLException;
 

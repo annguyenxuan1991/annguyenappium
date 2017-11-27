@@ -1,4 +1,4 @@
-package core.Constants;
+package core.constants;
 
 import io.appium.java_client.service.local.flags.ServerArgument;
 

@@ -1,6 +1,6 @@
 package core;
 
-import core.Managers.ServerManager;
+import core.managers.ServerManager;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;

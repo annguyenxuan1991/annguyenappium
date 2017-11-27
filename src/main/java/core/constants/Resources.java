@@ -1,6 +1,6 @@
-package core.Constants;
+package core.constants;
 
-import core.Managers.ServerManager;
+import core.managers.ServerManager;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;

@@ -1,9 +1,9 @@
-package core.Managers;
+package core.managers;
 
 import api.android.Android;
 import core.ADB;
-import core.Constants.Arg;
-import core.Constants.Resources;
+import core.constants.Arg;
+import core.constants.Resources;
 import core.Timer;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
@@ -15,10 +15,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.service.DriverService;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.ParseException;
 import java.util.*;
 
 public class DriverManager {
