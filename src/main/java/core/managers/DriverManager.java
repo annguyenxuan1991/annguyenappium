@@ -26,11 +26,11 @@ public class DriverManager {
     private static String nodeJS = "/usr/local/bin/node";
     private static String appiumJS = "/Users/khanhnxb-mc/node_modules/appium/build/lib/main.js";
 
-    private static String deviceId = (String) ADB.getConnectedDevices().get(0);
-    private static Map<String, URL> hosts;
+    private static String deviceId;
+    private static URL host;
     private static DriverService service;
 
-    private static DesiredCapabilities getDefaultCapsAndroid(String deviceID){
+    public static DesiredCapabilities getDefaultCapsAndroid(String deviceID){
         logger.info("Creating driver caps for device: "+deviceID);
         DesiredCapabilities caps = new DesiredCapabilities();
         caps.setCapability("version", new ADB(deviceID).getAndroidVersion());
@@ -41,17 +41,12 @@ public class DriverManager {
         return caps;
     }
 
-    //Random port from 4720 to 4730
-    private static String getRandomPort() {
-        return Integer.toString(new Random().nextInt((4730 - 4720) + 1) + 4720);
+    private static String getRandomPort(int fromPort, int toPort) {
+        return Integer.toString(new Random().nextInt((toPort - fromPort) + 1) + fromPort);
     }
 
-    private static URL host(String deviceId) throws MalformedURLException {
-        if(hosts == null) {
-            hosts = new HashMap<>();
-            hosts.put(deviceId, new URL("http://127.0.0.1:"+getRandomPort()+"/wd/hub"));
-        }
-        return hosts.get(deviceId);
+    public static URL host() throws MalformedURLException {
+            return host = new URL("http://127.0.0.1:"+getRandomPort(4720, 4730)+"/wd/hub");
     }
 
     public static DriverService createService() throws MalformedURLException {
@@ -62,15 +57,14 @@ public class DriverManager {
                     .usingDriverExecutable(new File("node.exe path"))
                     .withAppiumJS(new File("appium.js path"))
                     .withLogFile(new File(new File("log"), "androidLog.txt")));
-
         } else if (osName.contains("Mac")) {
             logger.info("Creating Appium service on MAC with Url: http://127.0.0.1 and Port: "+
-                    Integer.parseInt(host(deviceId).toString().split(":")[2].replace("/wd/hub","")));
+                    Integer.parseInt(host().toString().split(":")[2].replace("/wd/hub","")));
             service = new AppiumServiceBuilder()
                     .usingDriverExecutable(new File(nodeJS))
                     .withAppiumJS(new File(appiumJS))
-                    .withIPAddress(host(deviceId).toString().split(":")[1].replace("//", ""))
-                    .usingPort(Integer.parseInt(host(deviceId).toString().split(":")[2].replace("/wd/hub","")))
+                    .withIPAddress(host.toString().split(":")[1].replace("//", ""))
+                    .usingPort(Integer.parseInt(host.toString().split(":")[2].replace("/wd/hub","")))
                     .withArgument(Arg.TIMEOUT, "120")
                     .withArgument(GeneralServerFlag.LOG_LEVEL, "warn")
                     .build();
@@ -89,9 +83,8 @@ public class DriverManager {
                     queueUp();
                     gracePeriod();
                     logger.info("Trying to create new Driver for device: "+device);
-                    createService().start();
-                    Android.driver = new AndroidDriver(host(device), getDefaultCapsAndroid(device));
-                    Android.adb = new ADB(device);
+                    ParallelManager.getService().start();
+                    ParallelManager.setDriver(new AndroidDriver(host, getDefaultCapsAndroid(deviceId)));
                     leaveQueue();
                 }
             }catch (Exception e){
@@ -103,8 +96,8 @@ public class DriverManager {
     public static void killDriver(){
         if(Android.driver != null){
             logger.info("Killing Android Driver");
-            Android.driver.quit();
-            service.stop();
+            ParallelManager.freeDriverInstance();
+            ParallelManager.stopService();
         } else logger.info("Android Driver is not initialized, nothing to kill");
     }
 
@@ -173,7 +166,9 @@ public class DriverManager {
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }
-    }    public static void leaveQueue(){
+    }
+
+    private static void leaveQueue(){
         try {
             JSONObject jsonQueue = Resources.getQueue();
             jsonQueue.remove(deviceId);
